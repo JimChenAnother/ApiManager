@@ -9,12 +9,12 @@
     $type = $_GET['type'];
     if(empty($type)){
         //已经分类下的所有接口start
-        $sql = "select id,num,name from api where aid='{$_GET['tag']}' and isdel=0 order by ord desc,id desc";
+        $sql = "select id,num,name from ".session('login_name')."_api where aid='{$_GET['tag']}' and isdel=0 order by ord desc,id desc";
         $list = select($sql);
     }else if($type == 'do'){
         $ord = count($_POST['api']);
         foreach($_POST['api'] as $v){
-            $sql = "update api set ord = '{$ord}' where id='{$v}' and aid='{$_GET['tag']}'";
+            $sql = "update ".session('login_name')."_api set ord = '{$ord}' where id='{$v}' and aid='{$_GET['tag']}'";
             update($sql);
             $ord--;
         }

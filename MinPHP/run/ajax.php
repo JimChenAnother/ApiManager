@@ -9,7 +9,7 @@
     function apiDelete(){
         //接口id
         $id = I($_POST['id']);
-        $sql = "update api set isdel='1' where id='{$id}'";
+        $sql = "update ".session('login_name')."_api set isdel='1' where id='{$id}'";
         $re = update($sql);
         die ($re ? '1' : '0');
     }

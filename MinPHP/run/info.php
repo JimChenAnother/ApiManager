@@ -25,7 +25,7 @@
             $lasttime = time(); //最后操作时间
             $lastuid = session('id'); //操作者id
             $isdel = 0; //是否删除的标识
-            $sql = "insert into api (
+            $sql = "insert into ".session('login_name')."_api (
             `aid`,`num`,`name`,`des`,`url`,
             `type`,`parameter`,`re`,`lasttime`,
             `lastuid`,`isdel`,`memo`,`ord`
@@ -59,7 +59,7 @@
            $lasttime = time(); //最后操作时间
            $lastuid = session('id'); //操作者id
 
-           $sql ="update api set num='{$num}',name='{$name}',
+           $sql ="update ".session('login_name')."_api set num='{$num}',name='{$name}',
            des='{$des}',url='{$url}',type='{$type}',
            parameter='{$parameter}',re='{$re}',lasttime='{$lasttime}',lastuid='{$lastuid}',memo='{$memo}'
            where id = '{$id}'";
@@ -74,7 +74,7 @@
        if(empty($id)){$id = I($_GET['id']);}
        $aid = I($_GET['tag']);
        //得到数据的详情信息start
-       $sql = "select * from api where id='{$id}' and aid='{$aid}'";
+       $sql = "select * from ".session('login_name')."_api where id='{$id}' and aid='{$aid}'";
        $info = find($sql);
        //得到数据的详情信息end
        if(!empty($info)){
@@ -91,14 +91,23 @@
        }
    //此分类下的接口列表
    }else{
-        $sql = "select api.id,aid,num,url,name,des,parameter,memo,re,lasttime,lastuid,type,login_name
-        from api
+        $sql = "select ".session('login_name')."_api.id,aid,num,url,name,des,parameter,memo,re,lasttime,lastuid,type,login_name
+        from ".session('login_name')."_api
         left join user
-        on api.lastuid=user.id
-        where aid='{$_GET['tag']}' and api.isdel=0
-        order by ord desc,api.id desc";
+        on ".session('login_name')."_api.lastuid=user.id
+        where aid='{$_GET['tag']}' and ".session('login_name')."_api.isdel=0
+        order by ord desc,".session('login_name')."_api.id desc";
+        if (isset($_GET['name'])){
+            $login_name = $_GET['name'];
+            $sql = "select ".$login_name."_api.id,aid,num,url,name,des,parameter,memo,re,lasttime,lastuid,type,login_name
+                    from ".$login_name."_api
+                    left join user
+                    on ".$login_name."_api.lastuid=user.id
+                    where aid='{$_GET['tag']}' and ".$login_name."_api.isdel=0
+                    order by ord desc,".$login_name."_api.id desc";
+        }
         $list = select($sql);
-   }
+   }    
 ?>
 <?php if($op == 'add'){ ?>
     <!--添加接口 start-->

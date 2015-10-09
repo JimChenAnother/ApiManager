@@ -15,7 +15,7 @@ switch($op){
             $cdesc = $_VAL['cdesc'];
             $time = time();
             if(!empty($cname) && !empty($cdesc)){
-                $sql = "insert into cate (cname,cdesc,addtime) values('{$cname}','{$cdesc}','{$time}')";
+                $sql = "insert into cate (cid,cname,cdesc,addtime) values(".session('id').",'{$cname}','{$cdesc}','{$time}')";
                 $re = insert($sql);
                 if($re){
                     go(U());
@@ -26,7 +26,7 @@ switch($op){
                 echo '<div class="alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 分类名与描述不能为空</div>';
             }
         }
-    break;
+        break;
     //删除
     case 'delete':
         $aid = I($_POST['aid']);
@@ -37,7 +37,7 @@ switch($op){
         }else{
             echo '<div class="alert alert-danger" role="alert"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 分类删除失败</div>';
         }
-    break;
+        break;
     //编辑
     case 'edit';
         $_VAL = I($_POST);
@@ -54,7 +54,7 @@ switch($op){
             $sql = "select * from cate where aid='{$aid}'";
             $info = find($sql);
         }
-    break;
+        break;
 }
 ?>
 <?php if($op == 'add'){ ?>

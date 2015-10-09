@@ -14,6 +14,11 @@
             $menu = ' - 登录';
             $file = './MinPHP/run/login.php';
             break;
+        //注册
+        case 'register':
+            $menu = ' - 注册';
+            $file = './MinPHP/run/register.php';
+            break;
         //首页
         case 'index':
             $menu = ' - 欢迎';
@@ -39,8 +44,8 @@
             break;
         //ajax请求
         case 'ajax':
-           die(include('./MinPHP/run/ajax.php'));
-        break;
+            die(include('./MinPHP/run/ajax.php'));
+            break;
         default :
             $menu = ' - 欢迎';
             $file = './MinPHP/run/hello.php';

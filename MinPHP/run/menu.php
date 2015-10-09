@@ -1,7 +1,9 @@
 <?php defined('API') or exit('http://gwalker.cn');?>
 <!--导航-->
 <?php if($act != 'api' && $act != 'sort'){
-    $list = select('select * from cate where isdel=0 order by addtime desc');
+    if(!session('id') || !$list = select("select * from cate where cid=".session('id')." and isdel=0 order by addtime desc")){
+        $list = '';
+    }
 ?>
     <div class="form-group">
         <input type="text" class="form-control" id="searchcate" onkeyup="search('cate',this)" placeholder="search here">
@@ -34,7 +36,6 @@
             <?php } ?>
         </ul>
     </div>
-
     <form action="?act=cate" method="post">
         <?php if(is_supper()){?>
         <!--只有超级管理员才可以添加分类-->
@@ -44,7 +45,12 @@
         <?php } ?>
     </form>
 <?php } else{
-    $sql = "select * from api where aid = '{$_GET['tag']}' and isdel='0' order by ord desc,id desc";
+    $sql = "select * from ".session('login_name')."_api where aid = '{$_GET['tag']}' and isdel='0' order by ord desc,id desc";
+    //$sql = "select * from jim_api where aid = '{$_GET['tag']}' and isdel='0' order by ord desc,id desc";
+    if(isset($_GET['name'])) {
+        $login_name = $_GET['name'];
+        $sql = "select * from ".$login_name."_api where aid='{$_GET['tag']}' and isdel='0' order by ord desc,id desc";
+    }
     $list = select($sql);?>
     <div class="form-group">
         <input type="text" class="form-control" id="searchapi" placeholder="search here" onkeyup="search('api',this)">
@@ -108,7 +114,6 @@
             }
         }
     }
-
     window.onload=function(){
         //添加关闭,打开左侧菜单的功能
         <?php if($_COOKIE[C('cookie->navbar')]==1){
@@ -116,7 +121,6 @@
         }else{
             echo 'var status_flg="&lt";var cursor="w-resize"';
         }?>
-
         var navbarButton = '<div onclick="navbar(this)" ' +
             'style="text-align:center;line-height:120px;border-bottom-right-radius:5px;cursor:'+cursor+';border-top-right-radius:5px;width:14px;height:120px;background: rgba(91,192,222, 0.8);position:fixed;left:0;top:260px;color:#fff;box-shadow: 0px 0px 0px 1px #cccccc;">' +
             status_flg +

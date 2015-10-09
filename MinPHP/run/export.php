@@ -9,18 +9,17 @@
     $version = date('YmdHis');
     $filename = $filename['cname'].$version.'.html';
     //要抓取的接口分类url
-    $url = BASEURL.U(array('act'=>'api','tag'=>$tag));
+    $url = BASEURL.U(array('act'=>'api','tag'=>$tag,'name'=>session('login_name')));
     // 如果file_get_contents函数不能用就用curl方式获取
     function file_get_contents_fixed($url)
     {
-
         switch (true) {
-            case function_exists('file_get_contents'):
-                $res = file_get_contents($url);
-                break;
+            // case function_exists('file_get_contents'):
+            //     $res = file_get_contents($url);
+            //     break;
             case function_exists('curl_init'):
                 $ch = curl_init();
-                $timeout = 10; // set to zero for no timeout
+                $timeout = 0; // set to zero for no timeout
                 curl_setopt ($ch, CURLOPT_URL,$url);
                 curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1); 
                 curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
@@ -43,7 +42,6 @@
     }
     $content =  preg_replace_callback($pattern,'getCssFileContent',$content);
     //css文件替换--end
-
     //js文件替换--start
     $pattern = '/<script src="(.+?\.js)"><\/script>/is';
     function getJSFileContent($matches){
@@ -54,7 +52,6 @@
     $content =  preg_replace_callback($pattern,'getJSFileContent',$content);
     //js文件替换--end
     //========js与css静态文件替换end=======================================
-
     //=======页面锚点连接替换start=========================================
     $pattern = '/href=".+?tag=\d#(\w+)"/i';
     function changeLink($matches){
